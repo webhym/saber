@@ -10,7 +10,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // 导入axios
-
+import axios from 'axios'
 
 //使用饿了么UI
 Vue.use(ElementUI)
@@ -19,6 +19,9 @@ Vue.use(ElementUI)
 //false不是生产环境级别日志，开发环境日志，日志详细
 //true生产环境级别日志，上线之后部署服务器之后，日志简单
 Vue.config.productionTip = false
+
+//挂载 $http 对象就是axios
+Vue.prototype.$http = axios
 
 //根实例
 //使用App.vue组件渲染到 #app容器中
