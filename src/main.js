@@ -8,6 +8,10 @@ import router from '@/router'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+
+// 导入axios
+
+
 //使用饿了么UI
 Vue.use(ElementUI)
 
