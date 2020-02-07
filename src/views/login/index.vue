@@ -6,7 +6,7 @@
     <el-card class="my-card">
       <img src="../../assets/logo_index.png" alt />
       <!-- 表单 -->
-      <el-form ref="loginFrom" :model="loginForm" :rules="loginRules" status-icon>
+      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" status-icon>
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
@@ -75,10 +75,22 @@ export default {
   methods: {
     login() {
       //对整体表单进行校验
-      this.$refs.loginForm.validator(valid => {
+      this.$refs.loginForm.validate(valid => {
         //valid 值为 true 校验成功
         if (valid) {
           //TODO 进行登录
+          this.$http
+            .post(
+              "http://ttapi.research.itcast.cn/mp/v1_0/authorizations",
+              this.loginForm
+            )
+            .then(res => {
+              //响应报文对象(响应状态行，响应头，响应主体)
+              this.$router.push("/");
+            })
+            .catch(() => {
+              this.$message.Error("手机号或验证码错误");
+            });
         }
       });
     }
