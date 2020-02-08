@@ -1,15 +1,18 @@
 <template>
   <el-container class="container-home">
-    <el-aside class="my-saide" width="200px">
+    <el-aside class="my-saide" :width="isOpen?'200px':'64px'">
       <!-- logo区域 -->
-      <div class="logo"></div>
+      <div class="logo" :class="{minLogo:!isOpen}"></div>
       <!-- 导航菜单 -->
+      <!-- 布尔类型的值必须使用:否则值是字符串类型 -->
       <el-menu
         default-active="1"
         background-color="#002233"
         text-color="#fff"
         active-text-color="#ffd04b"
         style="border-right : none"
+        :collapse="!isOpen"
+        :collapse-transition="false"
       >
         <el-menu-item index="1">
           <i class="el-icon-s-home"></i>
@@ -43,7 +46,7 @@
     </el-aside>
     <el-container>
       <el-header class="my-header">
-        <span class="icon el-icon-s-fold"></span>
+        <span @click="toggleMenu" class="icon el-icon-s-fold"></span>
         <span class="text">hym狂的很嗷</span>
         <!-- 右边下拉菜单 -->
         <el-dropdown class="my-dropdown">
@@ -70,7 +73,17 @@
 
 <script>
 export default {
-  name: "app-home"
+  name: "app-home",
+  data() {
+    return {
+      isOpen: true
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.isOpen = !this.isOpen;
+    }
+  }
 };
 </script>
 
@@ -89,6 +102,11 @@ export default {
       // background: ... 背景图定位/背景图尺寸
       background: #002244 url(../../assets/logo_admin.png) no-repeat center /
         140px auto;
+    }
+    //样式一定需要写在logo下方，加上这个累之后覆盖上面的样式
+    .minLogo {
+      background-image: url(../../assets/logo_admin_01.png);
+      background-size: 36px auto;
     }
   }
   .my-header {

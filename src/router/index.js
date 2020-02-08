@@ -10,6 +10,7 @@ import Vue from 'vue'
 import Login from '@/views/login'
 import Home from '@/views/home'
 import welcome from '@/views/welcome'
+import NotFound from '@/views/404'
 
 Vue.use(VueRouter)
 //初始化
@@ -20,7 +21,9 @@ const router = new VueRouter({
             path: '/', component: Home, children: [
                 { path: '/', component: welcome }
             ]
-        }
+        },
+        //通配规则(以上所有规则不符合的时候，走这个规则)
+        { path: '*', component: NotFound }
     ]
 })
 //导出
