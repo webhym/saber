@@ -76,25 +76,38 @@ export default {
   methods: {
     login() {
       //对整体表单进行校验
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         //valid 值为 true 校验成功
         if (valid) {
           //TODO 进行登录
-          this.$http
-            .post(
-              "http://ttapi.research.itcast.cn/mp/v1_0/authorizations",
-              this.loginForm
-            )
-            .then(res => {
-              //响应报文对象(响应状态行，响应头，响应主体 res.data)
-              // res.data = {message:'',data:'用户信息'}对比
-              //本地存储用户信息，使用auth.js模块中的setUser函数
-              auth.setUser(res.data.data); //这才是用户信息{token,id,name,photo}
-              this.$router.push("/");
-            })
-            .catch(() => {
-              this.$message.Error("手机号或验证码错误");
-            });
+          // this.$http
+          //   .post(
+          //     "http://ttapi.research.itcast.cn/mp/v1_0/authorizations",
+          //     this.loginForm
+          //   )
+          //   .then(res => {
+          //     //响应报文对象(响应状态行，响应头，响应主体 res.data)
+          //     // res.data = {message:'',data:'用户信息'}对比
+          //     //本地存储用户信息，使用auth.js模块中的setUser函数
+          //     auth.setUser(res.data.data); //这才是用户信息{token,id,name,photo}
+          //     this.$router.push("/");
+          //   })
+          //   .catch(() => {
+          //     this.$message.Error("手机号或验证码错误");
+          //   });
+          try {
+            // 理想情况
+            //1.发送请求获取数据
+            const res = await this.$http.post("authorizations", this.loginForm);
+            //2.本地存储用户信息
+            auth.setUser(res.data.data);
+            //3.跳转到首页
+            this.$router.push("/");
+          } catch (e) {
+            //异常情况
+            //1.错误提示即可
+            this.$message.Error("手机号或验证码错误");
+          }
         }
       });
     }
