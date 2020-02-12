@@ -9,6 +9,10 @@ import router from '@/router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+//使用自己封装的插件
+import plugin from '@/plugin'
+Vue.use(plugin)
+
 // 导入自己配置axios
 import axios from '@/api'
 
