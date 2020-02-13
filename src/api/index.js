@@ -2,6 +2,7 @@
 import axios from 'axios'
 import auth from '@/utils/auth'
 import router from '@/router'
+import JSONBIGINT from 'json-bigint'
 
 //对axios进行配置
 //基准地址配置
@@ -17,6 +18,19 @@ axios.interceptors.request.use(config => {
 }, error => {
     return Promise.reject(error)
 })
+
+//转换响应格式
+axios.defaults.transformResponse = [data => {
+    //进行格式转换 data有可能不是json  极端情况
+    // return JSONBIGINT.parse(data) 可能会报错
+    try{
+        //正常转换
+        return JSONBIGINT.parse(data)
+    }catch(e){
+        return data
+    }    
+}]
+
 //响应拦截器
 axios.interceptors.response.use(res => {
     return res

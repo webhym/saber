@@ -20,7 +20,12 @@
           </template>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select @change="changeChannel" v-model="filterData.channel_id" placeholder="请选择" clearable>
+          <el-select
+            @change="changeChannel"
+            v-model="filterData.channel_id"
+            placeholder="请选择"
+            clearable
+          >
             <el-option
               v-for="item in channelOptions"
               :key="item.id"
@@ -71,20 +76,20 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120px">
-          <template>
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+          <template slot-scope="scope">
+            <el-button @click="toEditArticle(scope.row.id)" type="primary" icon="el-icon-edit" circle></el-button>
             <el-button type="danger" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-      style="margin-top:20px"
-      background
-      layout="prev, pager, next"
-      @current-change="pager"
-      :current-page='filterData.page'
-      :page-size="filterData.per_page"
-      :total="total"
+        style="margin-top:20px"
+        background
+        layout="prev, pager, next"
+        @current-change="pager"
+        :current-page="filterData.page"
+        :page-size="filterData.per_page"
+        :total="total"
       ></el-pagination>
     </el-card>
   </div>
@@ -120,16 +125,20 @@ export default {
     this.getArticles();
   },
   methods: {
+    //去编辑文章
+    toEditArticle(id){
+      this.$router.push('/publish?id=${id}')
+    },
     //频道改变后
-    changeChannel (){
-      if(this.filterData.channel_id === ''){
-        this.filterData.channel_id = null
+    changeChannel() {
+      if (this.filterData.channel_id === "") {
+        this.filterData.channel_id = null;
       }
     },
     //筛选逻辑
-    search(){
-      this.filterData.page = 1
-      this.getArticles()
+    search() {
+      this.filterData.page = 1;
+      this.getArticles();
     },
     //选择日期范围
     changeDate(dateArr) {
@@ -142,10 +151,10 @@ export default {
       }
     },
     //分页切
-    pager(newPage){
+    pager(newPage) {
       //修改参数
-      this.filterData.page = newPage
-      this.getArticles()
+      this.filterData.page = newPage;
+      this.getArticles();
     },
     //获取频道数据
     async getChannelOptions() {
