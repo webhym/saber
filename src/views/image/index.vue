@@ -16,16 +16,23 @@
       </div>
       <!-- 列表 -->
       <div class="img-list">
-        <div class="img-item" v-for="i in 10" :key="i">
-          <img src="../../assets/avatar.jpg" alt />
+        <div class="img-item" v-for="item in images" :key="item.id">
+          <img :src="item.url" alt />
           <div class="option">
-            <span class="el-icon-star-off"></span>
+            <span class="el-icon-star-off" :class="{red: item.is_collected}"></span>
             <span class="el-icon-delete"></span>
           </div>
         </div>
       </div>
       <!-- 分页 -->
-      <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="reqParams.per_page"
+        :current-page="reqParams.page"
+        :total="1000"
+        @current-change="pager"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -40,8 +47,29 @@ export default {
         collect: false,
         page: 1,
         per_page: 10
-      }
+      },
+      //素材列表
+      images: [],
+      // 总条数
+      total: 0
     };
+  },
+  created() {
+    this.getImages();
+  },
+  methods: {
+    //切换分页
+    pager(newPage) {
+      this.reqParams.page = newPage;
+      this.getImages();
+    },
+    async getImages() {
+      const res = await this.$http.get("user/images", {
+        params: this.reqParams
+      });
+      this.images = res.data.data.results;
+      this.total = res.data.data.total_count;
+    }
   }
 };
 </script>
