@@ -40,12 +40,23 @@
     </el-card>
     <!-- 对话框 -->
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
-      <span>上传组件</span>
+      <el-upload
+        class="avatar-uploader"
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        name="image"
+        :headers="uploadHeaders"
+        :show-file-list="false"
+        :on-success="handleSuccess"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import auth from '@/utils/auth'
 export default {
   name: "container-image",
   data() {
@@ -61,18 +72,37 @@ export default {
       //素材列表
       images: [],
       // 总条数
-      total: 0
+      total: 0,
+      //预览图片地址
+      imageUrl: null,
+      //上传请求头
+      uploadHeaders:{
+        Authorization: `Bearer ${auth.getUser().token}`
+      }
     };
   },
   created() {
     this.getImages();
   },
   methods: {
+    //上传成功
+    handleSuccess(res) {
+      //提示 + 预览
+      this.$message.success('上传成功')
+      this.imageUrl = res.data.url
+      //关闭对话框 + 更新当前列表
+      window.setTimeout(() => {
+        this.dialogVisible = false
+        this.getImages()
+      },3000)
+    },
     //打开对话框
     openDialog() {
       // 1.准备一个对话框
       // 2.再来打开对话框
       this.dialogVisible = true;
+      // 清空预览图
+      this.imageUrl = null
     },
     // 删除函数
     delImage(id) {
