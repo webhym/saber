@@ -8,19 +8,23 @@
       <div class="btn-box">
         <!-- collect 值为true收藏的图片  false全部的图片 -->
         <!-- :label 指定值才是布尔类型  -->
-        <el-radio-group v-model="reqParams.collect" size="small">
+        <el-radio-group @change="changeCollect()" v-model="reqParams.collect" size="small">
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button style="float:right" type="success" size="small">添加素材</el-button>
+        <el-button @click="openDialog()" style="float:right" type="success" size="small">添加素材</el-button>
       </div>
       <!-- 列表 -->
       <div class="img-list">
         <div class="img-item" v-for="item in images" :key="item.id">
           <img :src="item.url" alt />
-          <div class="option">
-            <span class="el-icon-star-off" :class="{red: item.is_collected}"></span>
-            <span class="el-icon-delete"></span>
+          <div class="option" v-if="!reqParams.collect">
+            <span
+              @click="toggleStatus(item)"
+              class="el-icon-star-off"
+              :class="{red: item.is_collected}"
+            ></span>
+            <span @click="delImage(item.id)" class="el-icon-delete"></span>
           </div>
         </div>
       </div>
@@ -34,6 +38,10 @@
         @current-change="pager"
       ></el-pagination>
     </el-card>
+    <!-- 对话框 -->
+    <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
+      <span>上传组件</span>
+    </el-dialog>
   </div>
 </template>
 
@@ -42,6 +50,8 @@ export default {
   name: "container-image",
   data() {
     return {
+      //控制对话框显示隐藏
+      dialogVisible: false,
       //查询条件
       reqParams: {
         collect: false,
@@ -58,6 +68,53 @@ export default {
     this.getImages();
   },
   methods: {
+    //打开对话框
+    openDialog() {
+      // 1.准备一个对话框
+      // 2.再来打开对话框
+      this.dialogVisible = true;
+    },
+    // 删除函数
+    delImage(id) {
+      // 确认框
+      this.$confirm("亲，您是否要删除该图片素材?", "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          // 删除请求
+          try {
+            await this.$http.delete(`/user/images/${id}`);
+            this.$message.success("删除成功");
+            this.getImages();
+          } catch (e) {
+            this.$message.error("删除失败");
+          }
+        })
+        .catch(() => {});
+    },
+    //切换添加收藏与取消收藏
+    async toggleStatus(item) {
+      try {
+        const res = await this.$http.put(`/user/images/${item.id}`, {
+          collect: !item.is_collected
+        });
+        // res.data.data.collect 就是当前素材状态
+        this.$message.success(
+          res.data.data.collect ? "添加收藏成功" : "取消收藏成功"
+        );
+        // item 就是素材数据  is_collected 显示收藏图标的 颜色
+        item.is_collected = res.data.data.collect;
+      } catch (e) {
+        this.$message.error("操作失败");
+      }
+    },
+    //切换全部与收藏
+    changeCollect() {
+      this.reqParams.page = 1;
+      this.getImages();
+    },
     //切换分页
     pager(newPage) {
       this.reqParams.page = newPage;
