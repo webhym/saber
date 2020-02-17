@@ -34,7 +34,7 @@
         layout="prev, pager, next"
         :page-size="reqParams.per_page"
         :current-page="reqParams.page"
-        :total="1000"
+        :total="total"
         @current-change="pager"
       ></el-pagination>
     </el-card>
