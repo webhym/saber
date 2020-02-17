@@ -14,6 +14,7 @@ import welcome from '@/views/welcome'
 import NotFound from '@/views/404'
 import Article from '@/views/article'
 import Image from '@/views/image'
+import Publish from '@/views/publish'
 
 Vue.use(VueRouter)
 //初始化
@@ -25,6 +26,7 @@ const router = new VueRouter({
                 { path: '/', component: welcome },
                 { path: '/article', component: Article },
                 { path: '/image', component: Image },
+                { path: '/publish', component: Publish }
             ]
         },
         //通配规则(以上所有规则不符合的时候，走这个规则)
