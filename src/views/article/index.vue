@@ -68,6 +68,7 @@
           <template slot-scope="scope">
             <el-button
               @click="toEditArticle(scope.row.id)"
+              plain
               type="primary"
               icon="el-icon-edit"
               circle
@@ -139,7 +140,7 @@ export default {
     },
     //去编辑文章
     toEditArticle(id) {
-      this.$router.push("/publish?id=${id}");
+      this.$router.push(`/publish?id=${id}`);
     },
     //频道改变后
     // changeChannel() {
@@ -170,11 +171,11 @@ export default {
     },
     //获取频道数据
     //async getChannelOptions() {1
-      //发请求获取频道数据
-      //const res = await this.$http.get("channels");1
-      //res = {data:{message:'' data:{chanels:[// 频道数组 ]}}}
-      // this.channelOptions = [{id,name}] 数据格式
-      //this.channelOptions = res.data.data.channels;1
+    //发请求获取频道数据
+    //const res = await this.$http.get("channels");1
+    //res = {data:{message:'' data:{chanels:[// 频道数组 ]}}}
+    // this.channelOptions = [{id,name}] 数据格式
+    //this.channelOptions = res.data.data.channels;1
     // },+
     // 获取文章数据
     async getArticles() {
