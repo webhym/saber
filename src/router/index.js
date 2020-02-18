@@ -16,6 +16,7 @@ import Article from '@/views/article'
 import Image from '@/views/image'
 import Publish from '@/views/publish'
 import Comment from '@/views/comment'
+import Fans from '@/views/fans'
 
 
 Vue.use(VueRouter)
@@ -29,7 +30,8 @@ const router = new VueRouter({
                 { path: '/article', component: Article },
                 { path: '/image', component: Image },
                 { path: '/publish', component: Publish },
-                { path: '/Comment', component: Comment }
+                { path: '/Comment', component: Comment },
+                { path: '/Fans', component: Fans }
             ]
         },
         //通配规则(以上所有规则不符合的时候，走这个规则)

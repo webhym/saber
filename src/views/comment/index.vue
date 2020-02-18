@@ -73,26 +73,28 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(async () => {
-        try {
-          //res.data.data.allow_comment修改后的状态
-          //请求
-          const res = await this.$http.put(
-            `comments/status?article_id=${row.id}`,
-            {
-              allow_comment: !row.comment_status
-            }
-          );
-          //提示
-          this.$message.success(
-            res.data.data.allow_comment ? "打开成功" : "关闭成功"
-          );
-          // 修改当前行文章的评论状态
-          row.comment_status = res.data.data.allow_comment;
-        }catch(e){
-            this.$message.error('操作失败')
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          try {
+            //res.data.data.allow_comment修改后的状态
+            //请求
+            const res = await this.$http.put(
+              `comments/status?article_id=${row.id}`,
+              {
+                allow_comment: !row.comment_status
+              }
+            );
+            //提示
+            this.$message.success(
+              res.data.data.allow_comment ? "打开成功" : "关闭成功"
+            );
+            // 修改当前行文章的评论状态
+            row.comment_status = res.data.data.allow_comment;
+          } catch (e) {
+            this.$message.error("操作失败");
+          }
+        })
+        .catch(() => {});
     },
     // 分页
     pager(newPage) {
