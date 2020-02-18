@@ -12,25 +12,26 @@
           <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面：">
-          <el-radio-group v-model="articleForm.cover.type">
+          <el-radio-group @change="articleForm.cover.images=[]" v-model="articleForm.cover.type">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <div>
+          <div v-if="articleForm.cover.type===1">
             <!-- 组件位置 -->
             <my-image v-model="articleForm.cover.images[0]"></my-image>
-            <my-image></my-image>
-            <my-image></my-image>
+          </div>
+          <div v-if="articleForm.cover.type===3">
+            <my-image :key="i" v-for="i in 3" v-model="articleForm.cover.images[i-1]"></my-image>
           </div>
         </el-form-item>
         <el-form-item label="频道：">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">发布文章</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button @click="submit(false)" type="primary">发布文章</el-button>
+          <el-button @click="submit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -76,6 +77,21 @@ export default {
         }
       }
     };
+  },
+  methods: {
+    //添加文章draft===false 发布文章 draft===true 存入草稿
+    async submit(draft) {
+      try {
+        //请求
+        await this.$http.post(`articles?draft=${draft}`, this.articleForm);
+        //提示
+        this.$message.success(draft ? "存入草稿成功" : "发布文章成功");
+        //跳转
+        this.$router.push("/article");
+      } catch (e) {
+        this.$message.error("操作失败");
+      }
+    }
   }
 };
 </script>
