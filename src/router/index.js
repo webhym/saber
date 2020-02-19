@@ -17,7 +17,7 @@ import Image from '@/views/image'
 import Publish from '@/views/publish'
 import Comment from '@/views/comment'
 import Fans from '@/views/fans'
-
+import Setting from '@/views/setting'
 
 Vue.use(VueRouter)
 //初始化
@@ -31,7 +31,8 @@ const router = new VueRouter({
                 { path: '/image', component: Image },
                 { path: '/publish', component: Publish },
                 { path: '/Comment', component: Comment },
-                { path: '/Fans', component: Fans }
+                { path: '/Fans', component: Fans },
+                { path: '/Setting', component: Setting }
             ]
         },
         //通配规则(以上所有规则不符合的时候，走这个规则)
